@@ -4,23 +4,76 @@
     <meta charset="UTF-8">
     <title>webBeacon Test</title>
     <script src="app.js" async></script>
+    <style>
+        pre {
+            background-color: #000;
+            color: #fff;
+        }
+        a {
+            padding: 10px;
+            background-color: #ee0007;
+            border-radius: 10px;
+            color: #fff;
+            text-decoration: none;
+        }
+    </style>
 </head>
 <body>
     <h1>Track and navigate</h1>
+    <p>
+        Each link has a eventListener attached and handle the event with one of the below methods. There is no timeout
+        and no event prevention involved, so that the browser is navigating immediately.
+    </p>
 
     <section>
-        <h2>Try with fetch</h2>
+        <h2>Try with Fetch</h2>
+        <p>
+            Track with classic window.fetch. This should be cancelled by most browsers.
+        </p>
         <a href="/" id="fetch">Track</a>
+        <div>
+            <pre>
+fetchButton.addEventListener('click', e => {
+    fetch(proxyEndpoint, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data),
+    }).then(() => {});
+});
+            </pre>
+        </div>
     </section>
 
     <section>
-        <h2>Try with webBeacon application/json</h2>
+        <h2>Try with navigator.webBeacon and content-type "application/json"</h2>
+        <p>
+            Track with sendBeacon and send data as "application/json". This seems to be deprecated and dropped but let's see.
+        </p>
         <a href="/" id="wbaj">Track</a>
+        <div>
+            <pre>
+wbajButton.addEventListener('click', e => {
+    navigator.sendBeacon(proxyEndpoint, new Blob([JSON.stringify(data)], { type: "application/json" }));
+});
+            </pre>
+        </div>
     </section>
 
     <section>
-        <h2>Try with webBeacon text/plain</h2>
+        <h2>Try with navigator.webBeacon and content-type "text/plain"</h2>
+        <p>
+            Track with default sendBeacon as "text/plain". The content-type will be to "application/json" by the proxy.
+        </p>
         <a href="/" id="wbtp">Track</a>
+        <div>
+            <pre>
+wbtpButton.addEventListener('click', e => {
+    navigator.sendBeacon(proxyEndpoint, JSON.stringify(data));
+});
+            </pre>
+        </div>
     </section>
 </body>
 </html>
